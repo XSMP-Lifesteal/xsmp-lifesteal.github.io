@@ -4,35 +4,28 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   sync:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout current repository
         uses: actions/checkout@v3
 
-      - name: Show current directory
-        run: pwd
-
-      - name: List files before cleanup
-        run: ls -al
+      - name: Clone 'friend' repository
+        run: |
+          git clone https://github.com/xsmp-lifesteal/friend.git
 
       - name: Remove all files except .git and .github
         run: |
           shopt -s extglob
           rm -rf !(friend|.git|.github)
 
-      - name: List files after cleanup
-        run: ls -al
-
-      - name: Sync friend/yukitariko contents to root
+      - name: Sync yukitariko folder to root
         run: |
-          rsync -av --progress ./friend/yukitariko/ ./
-
-      - name: List files after sync
-        run: ls -al
+          rsync -av --progress friend/yukitariko/ ./
 
       - name: Commit and push changes
         run: |
