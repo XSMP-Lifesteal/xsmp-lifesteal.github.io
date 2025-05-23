@@ -2,8 +2,8 @@ name: Sync
 
 on:
   schedule:
-    - cron: '0 * * * *'
-  workflow_dispatch:
+    - cron: '0 * * * *'  # 每小时同步一次（UTC时间）
+  workflow_dispatch:       # 允许手动触发
 
 jobs:
   sync:
@@ -12,16 +12,20 @@ jobs:
     - name: Checkout your repo
       uses: actions/checkout@v3
 
-    - name: Clone friend's repo
+    - name: Clone friend's repo with submodules
       run: |
-        git clone --depth=1 https://github.com/HighPing64x/highping64x.github.io.git friend
-        find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.github' -exec rm -rf {} +
-        if [ -d "friend/yukitariko" ]; then
-          cp -r friend/yukitariko/* ./
-        else
+        git clone --recurse-submodules https://github.com/HighPing64x/highping64x.github.io.git friend
+        
+        if [ ! -d "friend/yukitariko" ]; then
           echo "❌ Error: 'friend/yukitariko' does not exist!"
           exit 1
         fi
+
+        # 清除当前目录中除 .git 和 .github 外的所有内容
+        find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.github' -exec rm -rf {} +
+
+        # 复制内容
+        cp -r friend/yukitariko/* ./
 
     - name: Commit & Push changes
       run: |
