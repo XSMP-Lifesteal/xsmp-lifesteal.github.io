@@ -2,8 +2,8 @@ name: Sync
 
 on:
   schedule:
-    - cron: '0 * * * *'  # 每小时同步一次（UTC时间）
-  workflow_dispatch:       # 允许手动触发
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -16,7 +16,12 @@ jobs:
       run: |
         git clone --depth=1 https://github.com/HighPing64x/highping64x.github.io.git friend
         find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.github' -exec rm -rf {} +
-        cp -r friend/yukitariko/* ./
+        if [ -d "friend/yukitariko" ]; then
+          cp -r friend/yukitariko/* ./
+        else
+          echo "❌ Error: 'friend/yukitariko' does not exist!"
+          exit 1
+        fi
 
     - name: Commit & Push changes
       run: |
