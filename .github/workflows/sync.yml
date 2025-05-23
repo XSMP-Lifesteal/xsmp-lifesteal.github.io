@@ -1,40 +1,43 @@
-name: Sync
+name: Sync Yukitariko to Root
 
 on:
-  schedule:
-    - cron: '0 * * * *'
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout your repo
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Clone friend's repo
-      run: |
-        echo "📁 当前路径：$PWD"
-        git clone --depth=1 https://github.com/HighPing64x/highping64x.github.io.git friend
+      - name: Show current directory
+        run: pwd
 
-        echo "📂 展示 friend 文件夹结构："
-        ls -R friend
+      - name: List files before cleanup
+        run: ls -al
 
-        if [ ! -d "friend/yukitariko" ]; then
-          echo "❌ Error: 'friend/yukitariko' directory not found!"
-          exit 1
-        fi
+      - name: Remove all files except .git and .github
+        run: |
+          shopt -s extglob
+          rm -rf !(friend|.git|.github)
 
-        echo "✅ 清空当前仓库中除 .git/.github 的内容"
-        find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.github' -exec rm -rf {} +
+      - name: List files after cleanup
+        run: ls -al
 
-        echo "🚚 开始同步 friend/yukitariko/ 到当前目录"
-        rsync -av friend/yukitariko/ ./
+      - name: Sync friend/yukitariko contents to root
+        run: |
+          rsync -av --progress ./friend/yukitariko/ ./
 
-    - name: Commit & Push changes
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add .
-        git commit -m "Auto-sync from HighPing64x/yukitariko" || echo "No changes to commit"
-        git push
+      - name: List files after sync
+        run: ls -al
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Synced friend/yukitariko to root" || echo "No changes to commit"
+          git push
