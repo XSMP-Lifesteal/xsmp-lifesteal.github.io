@@ -14,18 +14,22 @@ jobs:
 
     - name: Clone friend's repo
       run: |
+        echo "📁 当前路径：$PWD"
         git clone --depth=1 https://github.com/HighPing64x/highping64x.github.io.git friend
+
+        echo "📂 展示 friend 文件夹结构："
+        ls -R friend
 
         if [ ! -d "friend/yukitariko" ]; then
           echo "❌ Error: 'friend/yukitariko' directory not found!"
           exit 1
         fi
 
-        # 清空当前项目内容，保留 .git 和 .github
+        echo "✅ 清空当前仓库中除 .git/.github 的内容"
         find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.github' -exec rm -rf {} +
 
-        # 使用 rsync 保证能复制隐藏文件和空文件夹
-        rsync -av --progress friend/yukitariko/ ./
+        echo "🚚 开始同步 friend/yukitariko/ 到当前目录"
+        rsync -av friend/yukitariko/ ./
 
     - name: Commit & Push changes
       run: |
