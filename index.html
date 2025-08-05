@@ -12,20 +12,30 @@
             margin: 0;
             padding: 0;
             color: #fff;
-            background: url('background.png') no-repeat center center fixed;
-            background-color: rgba(0, 0, 0);
-            background-size: cover;
+            background-color: #000;
             position: relative;
+            overflow-x: hidden;
         }
-        body::before {
+        body::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover;
             z-index: -1;
+            opacity: 0;
+            animation: backgroundFadeIn 0.78s ease forwards;
+        }
+        @keyframes backgroundFadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
         }
         .container {
             max-width: 800px;
@@ -44,26 +54,17 @@
             max-width: 600px;
             opacity: 0;
             transform: scale(0.8);
-            animation: fadeInScale 1s ease-out forwards;
-            animation-delay: 0.3s;
+            animation: fadeInScale 0.78s ease forwards;
         }
-        h1 {
-            color: #ff0000;
-            font-size: 2.5em;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-        }
-        h2, h3 {
+        h2 {
             color: #ff0000;
         }
         .game-details {
-            margin-top: 30px;
             background-color: rgba(0, 0, 0, 0.5);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 20px;
             opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s ease-out forwards;
-            animation-delay: 0.6s;
+            animation: fadeInScale 0.69s ease forwards;
         }
         .play-button {
             display: inline-block;
@@ -71,7 +72,7 @@
             color: white;
             padding: 15px 30px;
             text-decoration: none;
-            border-radius: 50px;
+            border-radius: 20px;
             font-weight: bold;
             margin-top: 20px;
             font-size: 1.2em;
@@ -82,6 +83,7 @@
         .play-button:hover {
             background-color: #cc0000;
             transform: scale(1.05);
+            border-radius: 10px;
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.9);
         }
         footer {
@@ -93,8 +95,7 @@
             background-color: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
-            animation-delay: 1s;
+            animation: fadeInUp 0.78s ease forwards;
         }
         .studio-icon {
             width: 16px;
@@ -103,7 +104,6 @@
             margin-right: 5px;
         }
         
-        /* 动画定义 */
         @keyframes fadeInScale {
             0% {
                 opacity: 0;
@@ -125,15 +125,6 @@
                 transform: translateY(0);
             }
         }
-        
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
     </style>
 </head>
 <body>
@@ -144,14 +135,14 @@
         
         <section class="game-details">
             <h2>游戏详情</h2>
-            <p>《三年之约》是一款大地图战斗游戏，有着不错的打击手感和难度。</p>
+            <p>《三年之约》是一款用 Gandi IDE 制作、基于 Scratch 的大地图战斗游戏，有着不错的打击手感和难度。</p>
             
-            <h3>游戏特点</h3>
+            <h2>游戏特点</h3>
             <ul>
                 <li>畅快打击</li>
                 <li>符文系统</li>
                 <li>开放式剧情</li>
-                <li>关卡 & 怪物设计感强</li>
+                <li>关卡特色怪物</li>
             </ul>
             
             <h3>游戏玩法</h3>
@@ -163,9 +154,9 @@
         </section>
         
         <footer>
-            <p>&copy; 2024~2025 <img src="studio.png" alt="Halflife Studio图标" class="studio-icon">Halflife Studio 保留所有权利.</p>
-            <p>本游戏的制作已获得当事人 (韦三年等人) 的许可</p>
-            <p>本游戏使用 Gandi IDE 制作</p>
+            <p>&copy; 2024 ~ 2025 <img src="studio.png" alt="Halflife Studio 图标" class="studio-icon">Halflife Studio 保留所有权利.</p>
+            <p>本游戏的制作已获得当事人的许可。</p>
+            <p>本游戏使用 Gandi IDE 制作，基于 Scratch，属 Halflife Studio 在 CCW 2025 Summer Game Jam 的参赛作品。</p>
         </footer>
     </div>
 </body>
